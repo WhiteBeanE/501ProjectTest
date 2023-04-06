@@ -12,10 +12,12 @@ import com.oracle.ProjectTest.domain.Member;
 import com.oracle.ProjectTest.service.WriteService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MainController {
 	
 	private final WriteService writeService; 
