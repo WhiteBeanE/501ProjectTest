@@ -1,0 +1,32 @@
+package com.oracle.ProjectTest.conntroller;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.oracle.ProjectTest.domain.Category;
+import com.oracle.ProjectTest.domain.Member;
+import com.oracle.ProjectTest.service.WriteService;
+
+import lombok.RequiredArgsConstructor;
+
+
+@Controller
+@RequiredArgsConstructor
+public class MainController {
+	
+	private final WriteService writeService; 
+	
+	@GetMapping("/write")
+	public String writeFrom(Member member, Model model) {
+		System.out.println("MainController.writeFrom() Start");
+		// 카테고리 가져오기
+		List<Category> categoryList = writeService.categoryList();
+		model.addAttribute("member", member);
+		return "writeForm";
+	}
+	
+}
