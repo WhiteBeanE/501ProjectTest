@@ -49,7 +49,7 @@ public class MainController {
 		OutputStream out = null;
 		MultipartFile file = multiFile.getFile("upload");
 		if(file != null) {
-			if(file.getSize() > 0 && StringUti)
+			//if(file.getSize() > 0 && StringUti)
 		}
 	}
 	
