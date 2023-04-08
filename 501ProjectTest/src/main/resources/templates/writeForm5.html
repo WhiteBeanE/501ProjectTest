@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	#chooseFile {
+	    visibility: hidden;	
+}
+</style>
+<script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
+
+<style>
+.ck.ck-editor {
+	width: 80%;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.ck-editor__editable {
+	height: 80vh;
+}
+
+form {
+	text-align: center;
+}
+</style>	
+</head>
+<body>
+	<div class="container">
+		<h1>재능 등록</h1>
+		<form action="write" method="post" name="frm">
+		<div class="category">
+			<h4>카테고리</h4>
+			<p>강의하실 분야를 선택해 주세요.</p>
+			<select name="category1" class="category">
+				<option></option>
+			</select>
+			<select name="category2" class="category" >
+				<option></option>
+			</select>
+		</div>
+		<div class="mainImage">
+			<h4>대표 이미지</h4>
+			<p>메인 페이지에 보이는 썸네일 이미지이기 때문에 강의를 대표할 수 있는 이미지를 사용해 주세요<br>비율을 4:3이 가장 좋아요.</p>
+			<!-- 이미지를 표시할 img 태그 -->
+				<img id="imagePreview" src="/image/jpandaMainImageLabel.jpg" onclick="document.getElementById('chooseFile').click();" width="auto" height="250" />
+				
+				<!-- 파일 선택을 위한 input 태그 (display:none으로 숨겨줍니다.) -->
+				<input name="mainImage" type="file" id="chooseFile" accept="image/*" style="display:none;" />
+				
+				<script>
+				 // 파일 선택 후 미리보기 기능 구현
+				  document.getElementById('chooseFile').addEventListener('change', function() {
+				    var reader = new FileReader();
+				    reader.onload = function(e) {
+				      document.getElementById('imagePreview').src = e.target.result;
+				      // 이미지 변경 여부 체크
+				      document.getElementById('imageChanged').value = "true";
+				    }
+				    reader.readAsDataURL(this.files[0]);
+				  });
+				  
+				</script>
+				<input type="hidden" id="imageChanged" name="imageChanged" value="false" />
+		</div>
+		<div class="title">
+			<h4>제목</h4>
+			<p>메인 페이지에 제목이기 때문에 강의를 대표할 수 있는 키워드를 사용해 제목을 입력해 주세요.<br>한글을 30자 이하, 영어는 40자 이하를 권장합니다.</p>
+			<input type="text" name="title" class="title">
+			<button type="button" class="resetButton title">다시 작성</button>
+		</div>
+		<div class="context">
+			<h4>강의 소개</h4>
+			<p>강의에 대한 소개를 작성해주세요.</p>
+				<textarea id = "editor4" name = "editor4" class="context"></textarea>
+				<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+			<script>		
+			ClassicEditor
+			.create(document.querySelector('#editor4'), {
+				ckfinder: {
+					uploadUrl : '/image/upload'
+				}
+			})
+			.then(editor => {
+				console.log('Editor was initialized');
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	</script>
+			<button type="button" class="resetButton context">다시 작성</button>
+		<div class="bamboo">
+			<h4>가격</h4>
+			<p>정상 가격과 할인된 금액을 입력해 주세요.</p>
+			<div>
+				<h3>정상 밤부</h3>
+				<input type="number" name="bamboo" class="bamboo" placeholder="1000"><p>밤부</p>
+			</div>
+			<div>
+				<h3>할인 밤부</h3>
+				<input type="number" name="sale_bamboo" class="bamboo" placeholder="900"><p>밤부</p>
+			</div>
+			<div>
+				<h3>할인율</h3>
+				<input type="text" name="discount_bamboo" class="bamboo" placeholder="10" readonly><p>%</p>
+			</div>
+				<button type="button" class="resetButton bamboo">다시 작성</button>
+				<script>
+			    	// bamboo와 sale_bamboo 입력값이 변경될 때마다 할인율 계산
+			   		document.getElementsByName("bamboo")[0].addEventListener("input", calculateDiscount);
+			  		document.getElementsByName("sale_bamboo")[0].addEventListener("input", calculateDiscount);
+			  
+					  function calculateDiscount() {
+					    // 입력된 값 가져오기
+					    var bambooPrice = document.getElementsByName("bamboo")[0].value;
+					    var saleBambooPrice = document.getElementsByName("sale_bamboo")[0].value;
+					    
+					    // 할인율 계산
+					    var discountPercent = Math.round((bambooPrice - saleBambooPrice) / bambooPrice * 100);
+					    if (isNaN(discountPercent) || discountPercent === Infinity) {
+					      discountPercent = 0;
+					    }
+					    
+					    // 할인율 입력값에 할당
+					    document.getElementsByName("discount_bamboo")[0].value = discountPercent;
+						}
+					  
+				</script>			
+			</div>
+			<div class="summary">
+			<h4>요약 설명</h4>
+			<p>해당 강의에 대해 간단한 설명과 수강생들에게 왜 이 강의를 들어야 하는지 짧게 작성해주세요!</p>
+			<input type="text" name="summary" class="summary">
+			<button type="button" class="resetButton summary">다시 작성</button>
+			</div>
+		</div>	
+		</form>
+		<script>
+		// 모든 reset 버튼을 선택
+		const resetButtons = document.querySelectorAll('.resetButton');
+
+		// 각각의 reset 버튼에 클릭 이벤트를 등록
+		resetButtons.forEach(button => {
+		  button.addEventListener('click', () => {
+		    // 해당 버튼이 속한 구역을 찾음
+		    const area = button.closest('div');
+		    // 해당 구역 내의 모든 input 태그를 찾음
+		    const inputs = area.querySelectorAll(`input[class="${area.className}"]`);
+		    // 각 input 태그의 값을 초기화함
+		    inputs.forEach(input => {
+		      input.value = '';
+		    });
+		  });
+		});
+</script>
+	</div> <!-- container -->
+	
+										<div class="area-1">
+									  <input type="text" class="area-1" value="some value 1">
+									  <button class="reset-btn area-1">Reset</button>
+									</div>
+									
+									<div class="area-2">
+									  <input type="text" class="area-2" value="some value 2">
+									  <button class="reset-btn area-2">Reset</button>
+									</div>
+									
+									<div class="area-3">
+									  <input type="text" class="area-3" value="some value 3">
+									  <input type="text" class="area-3" value="some value 32">
+									  <button class="reset-btn area-3">Reset</button>
+									</div>
+									<script>
+									// 모든 reset 버튼을 선택
+									const resetButtons2 = document.querySelectorAll('.reset-btn');
+
+									// 각각의 reset 버튼에 클릭 이벤트를 등록
+									resetButtons2.forEach(button => {
+									  button.addEventListener('click', () => {
+									    // 해당 버튼이 속한 구역을 찾음
+									    const area = button.closest('div');
+									    // 해당 구역 내의 모든 input 태그를 찾음
+									    const inputs = area.querySelectorAll(`input[class="${area.className}"]`);
+									    // 각 input 태그의 값을 초기화함
+									    inputs.forEach(input => {
+									      input.value = '';
+									    });
+									  });
+									});
+									</script>
+</body>
+</html>

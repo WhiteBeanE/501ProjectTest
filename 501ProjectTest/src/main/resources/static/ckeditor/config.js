@@ -35,4 +35,10 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+	
+	config.filebrowserUploadMethod = 'form';
+	
+	config.allowedContent = true;
+	config.extraAllowedContent = 'img[width,height]';
+	config.pasteFilter = 'img[width,height,src]';
 };
