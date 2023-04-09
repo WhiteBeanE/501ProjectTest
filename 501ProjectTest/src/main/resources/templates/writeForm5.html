@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-	#chooseFile {
-	    visibility: hidden;	
-}
-</style>
-<script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
+
+<!-- CKEditor5 사용 -->
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
 <style>
 .ck.ck-editor {
@@ -29,25 +26,82 @@ form {
 <body>
 	<div class="container">
 		<h1>재능 등록</h1>
-		<form action="write" method="post" name="frm">
-		<div class="category">
-			<h4>카테고리</h4>
-			<p>강의하실 분야를 선택해 주세요.</p>
-			<select name="category1" class="category">
-				<option></option>
-			</select>
-			<select name="category2" class="category" >
-				<option></option>
-			</select>
+		<form action="/write" method="post" name="frm">
+	<!-- 임시 아이디 설정 PK라 INSERT시 MEMBER 테이블에 ID가 존재해야함 -->
+	<input type="hidden" name="SELLER_ID" value="gi1834">
+	<div class="category">
+		<h4>카테고리</h4>
+		<p>강의하실 분야를 선택해 주세요.</p>
+		
+		<!-- 상위 카테고리 선택 영역 -->
+		<select id="category1" name="UPPER_CATEGORY_NO" onchange="onCategory1Changed()">
+			<!-- <th:block th:each="category : ${categoryList}" th:if="${category.category_no % 10 == 0}">
+				<option th:value="${category.category_no}" th:text="${category.item}"></option>
+			</th:block> -->
+		</select>	
+
+		<!-- 하위 카테고리 선택 영역 -->
+		<select id="category2" name="LOWER_CATEGORY_NO">
+		</select>
+		<script th:inline="javascript">
+		
+			// model로 밭은 categoryList 값 가져오기
+		  	var categoryList = /*[[${categoryList}]]*/ [];
+		  
+		 	// select 요소를 가져온다
+		 	// 상위 카테고리 변수 선언
+		 	var selectElement = document.getElementById("category1");
+		  
+		  	// 카테고리 리스트를 순회하면서 option 요소를 동적으로 생성한다
+		  	// categoryList에서 상위 카테고리 값이 없는 카테고리만 상위 카테고리 옵션 추가
+		  	categoryList.forEach(function(category) {
+		    	if(category.upper_category_no === null) {
+		    		// 새로운 <option> 요소를 만듦
+		      		var optionElement = document.createElement("option");
+		    		// value를 category.category_no로 설정
+		      		optionElement.value = category.category_no;
+		    		// 출력할 text를 item로 설정
+		      		optionElement.text = category.item;
+		    		// 만들어진 <option> 요소를 상위 카테고리에 추가
+		      		selectElement.appendChild(optionElement);
+		    	}
+		 	});
+		  
+		  	// select 요소에 change 이벤트 리스너를 추가한다
+		  	// 상위 카테고리가 변경되면
+			selectElement.addEventListener("change", function() {
+				// 상위 카테고리의 값 category.category_no을 가져온다
+		  		var selectedCategoryNo = parseInt(this.value);
+				// 하위 카테고리 변수 선언
+		    	var category2SelectElement = document.getElementById("category2");
+				// 하위 카테고리 초기화
+		    	category2SelectElement.innerHTML = "";
+		    	// categoryList에서 상위 카테고리 값이 선택한 상위 카테고리 값과 같은 카테고리만 하위 카테고리 옵션 추가
+		    	categoryList.forEach(function(category) {
+		      	if (category.upper_category_no === selectedCategoryNo) {
+		      	// 새로운 <option> 요소를 만듦
+		        	var optionElement = document.createElement("option");
+		        	// value를 category.category_no로 설정
+		        	optionElement.value = category.category_no;
+		        	// 출력할 text를 item로 설정
+		        	optionElement.text = category.item;
+		        	// 만들어진 <option> 요소를 하위 카테고리에 추가
+		        	category2SelectElement.appendChild(optionElement);
+		      	}
+		   		});
+		  	});
+		</script>
 		</div>
-		<div class="mainImage">
+		
+		
+		<div class="MAIN_IMG">
 			<h4>대표 이미지</h4>
 			<p>메인 페이지에 보이는 썸네일 이미지이기 때문에 강의를 대표할 수 있는 이미지를 사용해 주세요<br>비율을 4:3이 가장 좋아요.</p>
 			<!-- 이미지를 표시할 img 태그 -->
 				<img id="imagePreview" src="/image/jpandaMainImageLabel.jpg" onclick="document.getElementById('chooseFile').click();" width="auto" height="250" />
 				
 				<!-- 파일 선택을 위한 input 태그 (display:none으로 숨겨줍니다.) -->
-				<input name="mainImage" type="file" id="chooseFile" accept="image/*" style="display:none;" />
+				<input name="MAIN_IMG" type="file" id="chooseFile" accept="image/*" style="display:none;" />
 				
 				<script>
 				 // 파일 선택 후 미리보기 기능 구현
@@ -67,13 +121,13 @@ form {
 		<div class="title">
 			<h4>제목</h4>
 			<p>메인 페이지에 제목이기 때문에 강의를 대표할 수 있는 키워드를 사용해 제목을 입력해 주세요.<br>한글을 30자 이하, 영어는 40자 이하를 권장합니다.</p>
-			<input type="text" name="title" class="title">
+			<input type="text" name="TITLE" class="title">
 			<button type="button" class="resetButton title">다시 작성</button>
 		</div>
 		<div class="context">
 			<h4>강의 소개</h4>
 			<p>강의에 대한 소개를 작성해주세요.</p>
-				<textarea id = "editor4" name = "editor4" class="context"></textarea>
+				<textarea id = "editor4" name = "CONTENT" class="context"></textarea>
 				<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 			<script>		
 			ClassicEditor
@@ -95,11 +149,11 @@ form {
 			<p>정상 가격과 할인된 금액을 입력해 주세요.</p>
 			<div>
 				<h3>정상 밤부</h3>
-				<input type="number" name="bamboo" class="bamboo" placeholder="1000"><p>밤부</p>
+				<input type="number" name="BAMBOO" class="bamboo" placeholder="1000"><p>밤부</p>
 			</div>
 			<div>
 				<h3>할인 밤부</h3>
-				<input type="number" name="sale_bamboo" class="bamboo" placeholder="900"><p>밤부</p>
+				<input type="number" name="SALE_BAMBOO" class="bamboo" placeholder="900"><p>밤부</p>
 			</div>
 			<div>
 				<h3>할인율</h3>
@@ -108,13 +162,13 @@ form {
 				<button type="button" class="resetButton bamboo">다시 작성</button>
 				<script>
 			    	// bamboo와 sale_bamboo 입력값이 변경될 때마다 할인율 계산
-			   		document.getElementsByName("bamboo")[0].addEventListener("input", calculateDiscount);
-			  		document.getElementsByName("sale_bamboo")[0].addEventListener("input", calculateDiscount);
+			   		document.getElementsByName("BAMBOO")[0].addEventListener("input", calculateDiscount);
+			  		document.getElementsByName("SALE_BAMBOO")[0].addEventListener("input", calculateDiscount);
 			  
 					  function calculateDiscount() {
 					    // 입력된 값 가져오기
-					    var bambooPrice = document.getElementsByName("bamboo")[0].value;
-					    var saleBambooPrice = document.getElementsByName("sale_bamboo")[0].value;
+					    var bambooPrice = document.getElementsByName("BAMBOO")[0].value;
+					    var saleBambooPrice = document.getElementsByName("SALE_BAMBOO")[0].value;
 					    
 					    // 할인율 계산
 					    var discountPercent = Math.round((bambooPrice - saleBambooPrice) / bambooPrice * 100);
@@ -131,10 +185,11 @@ form {
 			<div class="summary">
 			<h4>요약 설명</h4>
 			<p>해당 강의에 대해 간단한 설명과 수강생들에게 왜 이 강의를 들어야 하는지 짧게 작성해주세요!</p>
-			<input type="text" name="summary" class="summary">
+			<input type="text" name="SUMMARY" class="summary">
 			<button type="button" class="resetButton summary">다시 작성</button>
 			</div>
 		</div>	
+		<input type="submit" value="등록하기">
 		</form>
 		<script>
 		// 모든 reset 버튼을 선택
@@ -155,39 +210,5 @@ form {
 		});
 </script>
 	</div> <!-- container -->
-	
-										<div class="area-1">
-									  <input type="text" class="area-1" value="some value 1">
-									  <button class="reset-btn area-1">Reset</button>
-									</div>
-									
-									<div class="area-2">
-									  <input type="text" class="area-2" value="some value 2">
-									  <button class="reset-btn area-2">Reset</button>
-									</div>
-									
-									<div class="area-3">
-									  <input type="text" class="area-3" value="some value 3">
-									  <input type="text" class="area-3" value="some value 32">
-									  <button class="reset-btn area-3">Reset</button>
-									</div>
-									<script>
-									// 모든 reset 버튼을 선택
-									const resetButtons2 = document.querySelectorAll('.reset-btn');
-
-									// 각각의 reset 버튼에 클릭 이벤트를 등록
-									resetButtons2.forEach(button => {
-									  button.addEventListener('click', () => {
-									    // 해당 버튼이 속한 구역을 찾음
-									    const area = button.closest('div');
-									    // 해당 구역 내의 모든 input 태그를 찾음
-									    const inputs = area.querySelectorAll(`input[class="${area.className}"]`);
-									    // 각 input 태그의 값을 초기화함
-									    inputs.forEach(input => {
-									      input.value = '';
-									    });
-									  });
-									});
-									</script>
 </body>
 </html>

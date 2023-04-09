@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oracle.ProjectTest.TalentMapper">
+	<insert id="insertTalent" parameterType="Talent">
+		INSERT INTO talent VALUES(talent_seq_generator.NEXTVAL, #{SELLER_ID}, #{UPPER_CATEGORY_NO}, #{LOWER_CATEGORY_NO}, 
+					#{MAIN_IMG}, #{TITLE}, #{CONTENT}, #{BAMBOO}, #{SALE_BAMBOO}, #{SUMMARY}, '승인대기', 0, SYSDATE )
+	</insert>
+</mapper>

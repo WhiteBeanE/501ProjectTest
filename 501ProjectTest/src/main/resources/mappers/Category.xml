@@ -4,6 +4,9 @@
 
 <mapper namespace="com.oracle.ProjectTest.CategoryMapper">
 	<select id="CategoryList" resultType="Category">
-		SELECT * FROM dept
+		SELECT * FROM category
+	</select>
+	<select id="UpperCategoryList" resultType="Category" parameterType="int">
+		SELECT * FROM category WHERE upper_category_no = #{category1Value}
 	</select>
 </mapper>

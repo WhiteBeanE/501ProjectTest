@@ -5,6 +5,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="Category" type="com.oracle.ProjectTest.domain.Category" />
+		<typeAlias alias="Talent" type="com.oracle.ProjectTest.domain.Talent" />
 		<!-- Mapping xml에서 타입 경로를 짧게 쓰기 위해 사용 -->
 	</typeAliases>
 </configuration>
