@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -91,7 +92,15 @@ public class MainController {
 		// 현재경로/upload/파일명이 저장 경로
 		String savePath = realPath + "upload/" + newFileName;
 		System.out.println("MainController.image() 파일 저장 경로 + 파일 이름 -> " + savePath);
-
+		
+		// 해당 파일 경로에 폴더가 없을시 폴더 생성
+		String uploadPathf = realPath + "upload/";
+		File fileDirectory = new File(uploadPathf);
+		if(!fileDirectory.exists()) {
+			// 신규 폴더(Directory)생성
+			fileDirectory.mkdirs();
+		}
+		
 		// 브라우저에서 이미지 불러올 때 절대 경로로 불러오면 보안의 위험 있어 상대경로를 쓰거나 이미지 불러오는 jsp 또는 클래스 파일을 만들어 가져오는 식으로 우회해야 함
 		// 때문에 savePath와 별개로 상대 경로인 uploadPath 만들어줌
 		String uploadPath = "./upload/" + newFileName; 
@@ -114,6 +123,7 @@ public class MainController {
 	public String talrentWrite(Talent talent) {
 		System.out.println("MainController.talrentWrite() Start");
 		int result = writeService.talrentWrite(talent);
+		String imgString = talent.getMAIN_IMG();
 		System.out.println("talent.getTALENT_NO() -> " + talent.getTALENT_NO());
 		System.out.println("talent.getSELLER_ID() -> " + talent.getSELLER_ID());
 		System.out.println("talent.getTITLE() -> " + talent.getTITLE());
@@ -131,7 +141,51 @@ public class MainController {
 	    return categoryList;
 	  }
 	
-	 
+	 @PostMapping("/mainImage/upload")
+	 @ResponseBody
+	 public String uploadImage(@RequestParam("upload") MultipartFile file, HttpServletRequest request) throws Exception {
+		 	System.out.println("MainController.uploadImage() Start");
+	        // 이미지 업로드시 10mb이하 크기만 업로드 가능
+	        long maxFileSize = 10 * 1024 * 1024; // 10mb
+	        if (file.getSize() > maxFileSize) {
+	            return null;
+	        }
+
+	        // ModelAndView mav = new ModelAndView("jsonView");
+
+	        // 파일의 오리지널 네임
+	        String originalFileName = file.getOriginalFilename();
+
+	        // 파일의 확장자 추출
+	        String ext = originalFileName.substring(originalFileName.indexOf("."));
+
+	        // 서버에 저장될 때 중복된 파일 이름인 경우를 방지하기 위해 UUID에 확장자를 붙여 새로운 파일 이름을 생성
+	        String newFileName = UUID.randomUUID() + ext;
+
+	        // 이미지를 현재 경로와 연관된 파일에 저장하기 위해 현재 경로를 알아냄
+	        String realPath = request.getServletContext().getRealPath("/");
+
+	        // 현재경로/upload/파일명이 저장 경로
+	        String savePath = realPath + "upload/" + newFileName;
+	        System.out.println("Controller.uploadImage() 파일 저장 경로 + 파일 이름 -> " + savePath);
+
+	        // 브라우저에서 이미지 불러올 때 절대 경로로 불러오면 보안의 위험 있어 상대경로를 쓰거나 이미지 불러오는 jsp 또는 클래스 파일을 만들어 가져오는 식으로 우회해야 함
+	        // 때문에 savePath와 별개로 상대 경로인 uploadPath 만들어줌
+	        String uploadPath = "./upload/" + newFileName;
+	        System.out.println("Controller.uploadImage() 보안을 위한 상대 경로 출력 -> " + uploadPath);
+
+	        // 저장 경로로 파일 객체 생성
+	        File saveFile = new File(savePath);
+
+	        // 파일 업로드
+	        file.transferTo(saveFile);
+
+	        // uploaded, url 값을 modelandview를 통해 보냄
+	        // mav.addObject("uploaded", true); // 업로드 완료
+	        // mav.addObject("url", uploadPath); // 업로드 파일의 경로
+
+	        return uploadPath;
+	    }
 	 
 	 
 	 
