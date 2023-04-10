@@ -108,37 +108,16 @@ form {
 				<script>
 				// 파일 선택 후 미리보기 기능 구현
 				document.getElementById('chooseFile').addEventListener('change', function() {
+				    var file = this.files[0];
+				    var formData = new FormData();
+				    formData.append('upload', file);
 					var reader = new FileReader();
 				    reader.onload = function(e) {
 				      	document.getElementById('imagePreview').src = e.target.result;
 				      	// 이미지 변경 여부 체크
 				    }
 				    reader.readAsDataURL(this.files[0]);
-				    
-				    // 파일 업로드
-				    $.ajax({
-				        url: '/mainImage/upload',
-				        type: 'POST',
-				        data: formData,
-				        dataType: 'text',
-				        processData: false,
-				        contentType: false,
-				        success: function(data) {
-				            // 서버에서 리턴한 데이터 가공
-				            var url = data.url;
-				            var uploaded = data.uploaded;
-				            
-				            if (uploaded) {
-				                // 업로드 완료 시 input의 값을 변경
-				                $('#imageChanged').val(url);
-				            } else {
-				                alert('이미지 업로드에 실패했습니다.');
-				            }
-				        },
-				        error: function() {
-				            alert('이미지 업로드에 실패했습니다.');
-				        }
-				    });
+				      
 				});
 				
 				</script>

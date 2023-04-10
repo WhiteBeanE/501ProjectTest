@@ -143,19 +143,19 @@ public class MainController {
 	
 	 @PostMapping("/mainImage/upload")
 	 @ResponseBody
-	 public String uploadImage(@RequestParam("upload") MultipartFile file, HttpServletRequest request) throws Exception {
+	 public ModelAndView uploadImage(@RequestParam("upload") MultipartFile file, HttpServletRequest request) throws Exception {
 		 	System.out.println("MainController.uploadImage() Start");
 	        // 이미지 업로드시 10mb이하 크기만 업로드 가능
 	        long maxFileSize = 10 * 1024 * 1024; // 10mb
 	        if (file.getSize() > maxFileSize) {
 	            return null;
 	        }
-
-	        // ModelAndView mav = new ModelAndView("jsonView");
+	        
+	        ModelAndView mav = new ModelAndView("jsonView");
 
 	        // 파일의 오리지널 네임
 	        String originalFileName = file.getOriginalFilename();
-
+	        
 	        // 파일의 확장자 추출
 	        String ext = originalFileName.substring(originalFileName.indexOf("."));
 
@@ -181,10 +181,10 @@ public class MainController {
 	        file.transferTo(saveFile);
 
 	        // uploaded, url 값을 modelandview를 통해 보냄
-	        // mav.addObject("uploaded", true); // 업로드 완료
-	        // mav.addObject("url", uploadPath); // 업로드 파일의 경로
+	        mav.addObject("uploaded", true); // 업로드 완료
+	        mav.addObject("url", uploadPath); // 업로드 파일의 경로
 
-	        return uploadPath;
+	        return mav;
 	    }
 	 
 	 
