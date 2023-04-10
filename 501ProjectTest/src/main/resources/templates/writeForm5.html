@@ -6,6 +6,7 @@
 
 <!-- CKEditor5 사용 -->
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 <style>
 .ck.ck-editor {
@@ -28,7 +29,7 @@ form {
 		<h1>재능 등록</h1>
 		<form action="/write" method="post" name="frm">
 	<!-- 임시 아이디 설정 PK라 INSERT시 MEMBER 테이블에 ID가 존재해야함 -->
-	<input type="hidden" name="SELLER_ID" value="als123">
+	<input type="hidden" name="SELLER_ID" value="ftcxbgksj5p">
 	<div class="category">
 		<h4>카테고리</h4>
 		<p>강의하실 분야를 선택해 주세요.</p>
@@ -104,7 +105,7 @@ form {
 				<input type="file" id="chooseFile" accept="image/*" style="display:none;" />
 				
 				<!-- 메인 이미지 서버 업로드 경로 -->
-				<input type="hidden" id="imageChanged" name="MAIN_IMG">
+				<input type="hidden" id="imageChanged" name="MAIN_IMG" >
 				<script>
 				// 파일 선택 후 미리보기 기능 구현
 				document.getElementById('chooseFile').addEventListener('change', function() {
@@ -117,6 +118,27 @@ form {
 				      	// 이미지 변경 여부 체크
 				    }
 				    reader.readAsDataURL(this.files[0]);
+				    
+				    var form = new FormData();
+			        form.append( "upload", $("#chooseFile")[0].files[0] );
+			        
+			         jQuery.ajax({
+			             url : "/mainImage/upload"
+			           , type : "POST"
+			           , processData : false
+			           , contentType : false
+			           , data : form
+			           , dataType: 'json'
+			           , success:function(response) {
+			               alert("성공하였습니다.");
+			               console.log(response);
+			               document.getElementById('imageChanged').value = response.url;
+			           }
+			           ,error: function (jqXHR) 
+			           { 
+			               alert(jqXHR.responseText); 
+			           }
+			       });
 				      
 				});
 				

@@ -27,18 +27,6 @@ public class WriteRepositoryImpl implements WriteRepository {
 		return categoryList;
 	}
 	@Override
-	public List<Category> categoryList(int category1Value) {
-		System.out.println("WriteRepositoryImpl.categoryList Start");
-		List<Category> categoryList = null;
-		try {
-			categoryList = session.selectList("UpperCategoryList", category1Value);
-		} catch (Exception e) {
-			System.out.println("WriteRepositoryImpl.categoryList e.getMessage() -> " + e.getMessage());
-		}
-		System.out.println("WriteRepositoryImpl.categoryList categoryList.size() -> " + categoryList.size());
-		return categoryList;
-	}
-	@Override
 	public int talrentWrite(Talent talent) {
 		System.out.println("WriteRepositoryImpl.categoryList Start");
 		int result = 0;

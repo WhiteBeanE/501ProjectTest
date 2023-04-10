@@ -9,8 +9,6 @@ public interface WriteRepository {
 
 	List<Category> categoryList();
 
-	List<Category> categoryList(int category1Value);
-
 	int talrentWrite(Talent talent);
 
 }

@@ -45,12 +45,12 @@ public class MainController {
 	
 	// 등록 페이지
 	@GetMapping("/writeFrom5")
-	public String writeFrom5(Member member, Model model) {
+	public String writeFrom5( Model model) {
 		System.out.println("MainController.writeFrom5() Start");
 		// 카테고리 가져오기
 		List<Category> categoryList = writeService.categoryList();
 		System.out.println("MainController.writeFrom5() categoryList.size() -> " + categoryList.size());
-		model.addAttribute("member", member);
+		// model.addAttribute("member", member);
 		model.addAttribute("categoryList", categoryList);
 		return "writeForm5";
 	}
@@ -132,15 +132,6 @@ public class MainController {
 		return "redirect:/";
 	}
 	
-	 @GetMapping("/categories")
-	  public List<Category> upperCategory(@RequestParam("category1Value") int category1Value) {
-		 System.out.println("MainController.upperCategory() Start");
-			// 카테고리 가져오기
-			List<Category> categoryList = writeService.categoryList(category1Value);
-			System.out.println("MainController.writeFrom5() categoryList.size() -> " + categoryList.size());
-	    return categoryList;
-	  }
-	
 	 @PostMapping("/mainImage/upload")
 	 @ResponseBody
 	 public ModelAndView uploadImage(@RequestParam("upload") MultipartFile file, HttpServletRequest request) throws Exception {
@@ -163,15 +154,15 @@ public class MainController {
 	        String newFileName = UUID.randomUUID() + ext;
 
 	        // 이미지를 현재 경로와 연관된 파일에 저장하기 위해 현재 경로를 알아냄
-	        String realPath = request.getServletContext().getRealPath("/");
+	        String realPath = request.getServletContext().getRealPath("/mainImage/");
 
 	        // 현재경로/upload/파일명이 저장 경로
-	        String savePath = realPath + "upload/" + newFileName;
+	        String savePath = realPath + newFileName;
 	        System.out.println("Controller.uploadImage() 파일 저장 경로 + 파일 이름 -> " + savePath);
 
 	        // 브라우저에서 이미지 불러올 때 절대 경로로 불러오면 보안의 위험 있어 상대경로를 쓰거나 이미지 불러오는 jsp 또는 클래스 파일을 만들어 가져오는 식으로 우회해야 함
 	        // 때문에 savePath와 별개로 상대 경로인 uploadPath 만들어줌
-	        String uploadPath = "./upload/" + newFileName;
+	        String uploadPath = "./mainImage/" + newFileName;
 	        System.out.println("Controller.uploadImage() 보안을 위한 상대 경로 출력 -> " + uploadPath);
 
 	        // 저장 경로로 파일 객체 생성

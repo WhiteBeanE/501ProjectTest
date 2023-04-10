@@ -22,13 +22,6 @@ public class WriteServiceImpl implements WriteService {
 		return categoryList;
 	}
 	@Override
-	public List<Category> categoryList(int category1Value) {
-		System.out.println("WriteServiceImpl.categoryList(category1Value) Start");
-		List<Category> categoryList = writeRepository.categoryList(category1Value);
-		System.out.println("WriteServiceImpl.categoryList(category1Value) categoryList.size() -> " + categoryList.size());
-		return categoryList;
-	}
-	@Override
 	public int talrentWrite(Talent talent) {
 		System.out.println("WriteServiceImpl.talrentWrite() Start");
 		int result = writeRepository.talrentWrite(talent);

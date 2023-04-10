@@ -4,7 +4,8 @@
 
 <mapper namespace="com.oracle.ProjectTest.TalentMapper">
 	<insert id="insertTalent" parameterType="Talent">
-		INSERT INTO talent VALUES(talent_seq_generator.NEXTVAL, #{SELLER_ID}, #{UPPER_CATEGORY_NO}, #{LOWER_CATEGORY_NO}, 
-					#{MAIN_IMG}, #{TITLE}, #{CONTENT}, #{BAMBOO}, #{SALE_BAMBOO}, #{SUMMARY}, '승인대기', 0, SYSDATE )
+	<!-- 더미 테이터 떄문에 시퀀스x MAX사용 -->
+		INSERT INTO talent VALUES((SELECT MAX(talent_no)+1 FROM talent), #{SELLER_ID}, #{UPPER_CATEGORY_NO}, #{LOWER_CATEGORY_NO}, 
+					#{MAIN_IMG}, #{TITLE}, #{CONTENT}, #{BAMBOO}, #{SALE_BAMBOO}, #{SUMMARY}, '검토중', 0, SYSDATE )
 	</insert>
 </mapper>
