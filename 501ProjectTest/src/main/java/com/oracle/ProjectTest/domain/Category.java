@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Category {
 	@Id
-	private Long category_no;
+	private Long categoryNo;
 	private String item;
-	private Long upper_category_no;
+	private Long upperCategoryNo;
 }

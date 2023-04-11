@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.ProjectTest.domain.Category;
-import com.oracle.ProjectTest.domain.Member;
 import com.oracle.ProjectTest.domain.Talent;
 import com.oracle.ProjectTest.service.WriteService;
 
@@ -123,12 +122,12 @@ public class MainController {
 	public String talrentWrite(Talent talent) {
 		System.out.println("MainController.talrentWrite() Start");
 		int result = writeService.talrentWrite(talent);
-		String imgString = talent.getMAIN_IMG();
-		System.out.println("talent.getTALENT_NO() -> " + talent.getTALENT_NO());
-		System.out.println("talent.getSELLER_ID() -> " + talent.getSELLER_ID());
-		System.out.println("talent.getTITLE() -> " + talent.getTITLE());
-		System.out.println("talent.getMAIN_IMG() -> " + talent.getMAIN_IMG());
-		System.out.println("talent.getCONTENT() -> " + talent.getCONTENT());
+		String imgString = talent.getMainImg();
+		System.out.println("talent.getTALENT_NO() -> " + talent.getTalentNo());
+		System.out.println("talent.getSELLER_ID() -> " + talent.getSellerId());
+		System.out.println("talent.getTITLE() -> " + talent.getTitle());
+		System.out.println("talent.getMAIN_IMG() -> " + talent.getMainImg());
+		System.out.println("talent.getCONTENT() -> " + talent.getContent());
 		return "redirect:/";
 	}
 	
@@ -184,12 +183,11 @@ public class MainController {
 	 
 	 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@GetMapping("/writeFrom4")
-	public String writeFrom4(Member member, Model model) {
+	public String writeFrom4( Model model) {
 		System.out.println("MainController.writeFrom4() Start");
 		// 카테고리 가져오기
 		List<Category> categoryList = writeService.categoryList();
 		System.out.println("MainController.writeFrom4() categoryList.size() -> " + categoryList.size());
-		model.addAttribute("member", member);
 		model.addAttribute("categoryList", categoryList);
 		return "writeForm4";
 	}

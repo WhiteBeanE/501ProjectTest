@@ -1,0 +1,69 @@
+@charset "UTF-8";
+/* Set font family and size */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+/* Center the form and set its max width */
+form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Set width and margin of the CKEditor */
+.ck.ck-editor {
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Set height of the CKEditor */
+.ck-editor__editable {
+  height: 80vh;
+}
+
+/* Style the category section */
+.category {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.category h4 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.category p {
+  margin-top: 10px;
+}
+
+/* Style the select elements */
+select {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+/* Style the submit button */
+button[type=submit] {
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button[type=submit]:hover {
+  background-color: #0069d9;
+}
+form {
+	text-align: center;
+}
